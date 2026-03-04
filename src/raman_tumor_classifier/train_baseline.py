@@ -9,12 +9,24 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 from raman_tumor_classifier.data import DataFormatError, load_dataset, split_dataset
+from raman_tumor_classifier.preprocessing import RamanPreprocessor
 
 
 def build_pipeline() -> Pipeline:
     """Собирает baseline-пайплайн классификации."""
     return Pipeline(
         steps=[
+            (
+                "spectra_preprocess",
+                RamanPreprocessor(
+                    apply_baseline_correction=True,
+                    baseline_poly_order=2,
+                    apply_savgol=True,
+                    savgol_window_length=9,
+                    savgol_polyorder=2,
+                    normalization="snv",
+                ),
+            ),
             ("scaler", StandardScaler()),
             ("clf", LogisticRegression(max_iter=500, class_weight="balanced")),
         ]
