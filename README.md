@@ -11,6 +11,12 @@ uv sync
 uv run python -m raman_tumor_classifier.train_baseline
 ```
 
+Если данные лежат в нестандартном месте, передайте путь через аргумент:
+
+```bash
+uv run python -m raman_tumor_classifier.train_baseline --data-path data/raw/spectra.csv
+```
+
 ## 2) Структура
 
 - `src/raman_tumor_classifier/` — исходный код.
@@ -53,4 +59,10 @@ uv run pytest
    - `RandomForest`, `XGBoost`, 1D-CNN.
 3. Ввести протокол валидации (stratified k-fold + внешняя валидация).
 
+## 7) Минимальные требования к входным данным
 
+- Наличие колонки `label` со значениями `0` или `1`.
+- Не менее двух числовых спектральных признаков.
+- Отсутствие пустых значений в признаках и целевой колонке.
+
+При нарушении формата пайплайн завершится с ошибкой валидации данных.
